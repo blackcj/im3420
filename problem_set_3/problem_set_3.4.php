@@ -15,6 +15,13 @@
 	// 3) (bonus) in reverse order.
 	// Each listing of the values must be in an HTML ordered list.
 	$items = array('Mercury','Venus','Earth','Mars','Jupiter','Saturn','Uranus','Neptune','Pluto');
+sort($items);
+$ilength=count($items);
+for($i=0;$i<$ilength;$i++)
+   {
+   echo $items[$i];
+   echo "<br>";
+   }
 ?>
 <!-- Bonus: also display the items in reverse -->
 <p>Return to the <a href="index.php">Problem Set index</a>.</p>
