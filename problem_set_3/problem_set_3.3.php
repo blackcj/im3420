@@ -13,13 +13,16 @@
 	// of words. Loop though the resulting array and count how
 	// many times the word 'the' occurs.
 	$content = "Alluvial fans occur adjacent to gully mouths along the scarps of the Minnesota River valley. Because these landforms occur after the River Warren ceased to flow, they are younger than 11,000 years before present (YBP) and perhaps younger than 9,200 YBP. The stratigraphy of a fan excavated by the Unimin Corporation near Ottawa, Minnesota reveals a sequence of fluvial and colluvial sediment. Including the modern soil, there are least two well developed paleosols. The presence of developed soils, in association with the other sediments, suggests prolonged periods of both intense erosion, and slope stability. Well documented climate changes during the Holocene in the Midwest may be responsible for destabilizing the slopes and promoting erosion.";
-	$wordsarray = explode("\n", $content);
+	$wordsarray = explode(" ", $content);
+	
 	$wordlength = count($wordsarray);
+	$count = 0;
 	for ($i=0; $i < $wordlength ; $i++) { 
-		while ( $content == "the") {
-			echo 'the';
+		if($wordsarray[$i] == "the") {
+			$count ++;
 		}
 	}
+	echo "'the' appeared " . $count . " times";
 ?>
 
 <p>Return to the <a href="index.php">Problem Set index</a>.</p>
