@@ -13,6 +13,14 @@
 	// given content each time the script is called. Display the words
 	// in a paragraph after shuffling (<--hint hint;) them.
 	$content = "The Web Design & Interactive Media program at The Art Institutes International Minnesota inspires students to develop the technical skills, critical thinking, creative problem solving and high quality work necessary to become competitive industry professionals. Demonstrate interactive concepts and relate those to current and historical trends in interactive media. Communicate the vision behind the creative work and promote the solutions to the client or target audience. Demonstrate the proficiency with field-specific software, languages, theories and practices to create interactive projects. Produce design solutions that show a strong understanding of color theory, composition, hierarchy, typography, motion, information architecture, usability, user-centered design principles, and programming languages.";
+	
+	$content_array = explode(" ",$content);
+	
+	shuffle($content_array);
+	
+	foreach ($content_array as $word) {
+	    echo "$word ";
+	}
 ?>
 <!-- SUPER HUGE MEGA BONUS: Capitalize the first word of the new 'shuffled' sentences and make sure each still ends with a period. -->
 <p>Return to the <a href="index.php">Problem Set index</a>.</p>
