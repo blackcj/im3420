@@ -1,0 +1,204 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script>
+
+// jQuery code
+$(document).ready(function(){
+	$('#Todo_form').submit(function() { 
+		addTodo($("#image_name").val());
+		return false; 
+		});	
+});
+
+var edit_id = -1;
+
+// Loads XML from GetTodos.php and writes HTML to the gallery div
+function loadXMLDoc()
+{
+	// Compose the request
+	xmlhttp=new XMLHttpRequest();
+	
+	// Add our response function, called when the server responds
+	xmlhttp.onreadystatechange=function()
+	{
+		// readyState == 4 && status == 200 means the response was sucessful and has XML
+	  	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			// Clear out any existing content in the gallery div
+			document.getElementById("gallery").innerHTML = "";
+			
+			// Assign XML to our xmlDoc variable
+			xmlDoc=xmlhttp.responseXML;
+			// Create an array of XML nodes (images)
+			var x=xmlDoc.getElementsByTagName("TODO");
+			
+			// Walks through all of the images and write the image tag with the path to the image
+			for (i=0;i<x.length;i++)
+			{ 
+				var id = x[i].getElementsByTagName("id")[0].childNodes[0].nodeValue;
+				var title = x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
+				// if completed class is strike otherwise standard
+			  	document.getElementById("gallery").innerHTML += ('<div><span id="todo' + id +'">' + title +'</span> <button class="remove" onClick=removeTodo(' + id +')>x</button>' +' <button class="edit" onClick=startEdit("' + id +'")>edit</button>' + '</div>');
+			  	
+			}	
+			$(".remove").on("click", removeItem);
+		}
+	}
+	
+	// send off our request
+	
+	xmlhttp.open("GET","api/GetTodos.php",true);
+	xmlhttp.send();
+
+}
+
+function startEdit(id) {
+	edit_id = id;
+	$("#todo"+id).html('<form id="updateForm"><input type="text" name="update_name" id="update_name" value="'+ $("#todo"+id).text() + '" /><button type="submit" class="button">Submit</button></form>');
+	$('#updateForm').submit(function() { 
+
+		updateTodo($("#update_name").val(), edit_id);
+			
+			edit_id = -1;
+			return false; 
+		});
+}
+
+function removeItem(event) { 
+	// fade out the clicked element
+	//alert($(this).text());
+	$(this).parent().fadeOut('slow', function() {
+    $(this).remove();
+  });
+
+}
+
+function addTodo(title)
+{
+	// Compose the request
+	xmlhttp=new XMLHttpRequest();
+	
+	// Add our response function, called when the server responds
+	xmlhttp.onreadystatechange=function()
+	{
+		// readyState == 4 && status == 200 means the response was sucessful and has XML
+	  	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			$("#image_name").val('');
+			$("#due_date").val('');
+			loadXMLDoc();
+		}
+	}
+
+	// send off our request
+	xmlhttp.open("GET","api/AddTodo.php?title=" + title, true);
+	xmlhttp.send();	
+}
+
+function addDate(due_date)
+{
+	// Compose the request
+	xmlhttp=new XMLHttpRequest();
+	
+	// Add our response function, called when the server responds
+	xmlhttp.onreadystatechange=function()
+	{
+		// readyState == 4 && status == 200 means the response was sucessful and has XML
+	  	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			$("#due_date").val('');
+			loadXMLDoc();
+		}
+	}
+
+	// send off our request
+	xmlhttp.open("GET","api/addDate.php?due_date=" + due_date, true);
+	xmlhttp.send();	
+}
+// function addDate(due_date)
+// {
+// 	// Compose the request
+// 	xmlhttp=new XMLHttpRequest();
+	
+// 	// Add our response function, called when the server responds
+// 	xmlhttp.onreadystatechange=function()
+// 	{
+// 		// readyState == 4 && status == 200 means the response was sucessful and has XML
+// 	  	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+// 		{
+// 			$("#due_date").val('');
+// 			loadXMLDoc();
+// 		}
+// 	}
+
+// 	// send off our request
+// 	$("#due_date"+due).val(due);
+// 	$("#due_date"+due).html(due);
+// 	// send off our request
+// 	xmlhttp.open("GET","api/TodoDate.php?title=" + title + "&due_date" +due,true);
+// 	xmlhttp.send();	
+// }
+
+
+function updateTodo(title, id)
+{
+	// Compose the request
+	xmlhttp=new XMLHttpRequest();
+	
+	// Add our response function, called when the server responds
+	xmlhttp.onreadystatechange=function()
+	{
+		// readyState == 4 && status == 200 means the response was sucessful and has XML
+	  	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			//$("#image_name").val('');
+		}else {
+				
+		}
+	}
+	$("#todo"+id).val(title);
+	$("#todo"+id).html(title);
+	// send off our request
+	xmlhttp.open("GET","api/UpdateTodo.php?title=" + title + "&id=" +id,true);
+	xmlhttp.send();	
+}
+
+function removeTodo(id)
+{
+	// Compose the request
+	xmlhttp=new XMLHttpRequest();
+	
+	// Add our response function, called when the server responds
+	xmlhttp.onreadystatechange=function()
+	{
+		// readyState == 4 && status == 200 means the response was sucessful and has XML
+	  	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			//loadXMLDoc();
+		}
+	}
+	
+	// send off our request
+	xmlhttp.open("GET","api/RemoveTodo.php?id=" + id,true);
+	xmlhttp.send();
+}
+
+</script>
+</head>
+<body onLoad="loadXMLDoc()">
+	<div id="formWrapper">
+		<form id="Todo_form">Todo Item
+	       <input type="text" name="image_name" id="image_name" value="" />
+	       Due Date
+	       <input type="text" name="due_date" id="due_date" value="" />
+	       <button type="submit" class="button">Submit</button>
+	    </form>
+    </div>
+    <div class="gallerywrapper">
+        <div id="gallery">
+            <!-- Do not add anything here, content generated by JavaScript  -->
+        </div>
+    </div>
+</body>
+</html>
